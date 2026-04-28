@@ -100,7 +100,7 @@
       "quantity": 120,
       "price": 5,
       "name": "Mineral Water",
-      "available": true,
+      "available": false,
       "id": "drinks_water",
       "category": "Drinks"
     },
@@ -108,9 +108,17 @@
       "quantity": 85,
       "price": 10,
       "name": "Juice Box",
-      "available": false,
+      "available": true,
       "id": "drinks_juice",
       "category": "Drinks"
+    },
+    {
+      "quantity": 40,
+      "price": 15,
+      "name": "Kota",
+      "available": true,
+      "id": "mainskota",
+      "category": "Mains"
     }
   ]
 }
