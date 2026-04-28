@@ -81,6 +81,7 @@ final class OrderStatusPanel extends JPanel implements PropertyChangeListener {
         add(south, BorderLayout.SOUTH);
 
         DeliveryManager.getInstance().addPropertyChangeListener(this);
+        OrderManager.getInstance().addPropertyChangeListener(this);
     }
 
     void setTrackingOrder(Order order) {
@@ -89,6 +90,10 @@ final class OrderStatusPanel extends JPanel implements PropertyChangeListener {
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
+        if (OrderManager.PROPERTY_ORDER.equals(evt.getPropertyName())) {
+            SwingUtilities.invokeLater(() -> applyFromPersistedOrder(evt.getNewValue()));
+            return;
+        }
         if (!DeliveryManager.PROPERTY_DELIVERY.equals(evt.getPropertyName())) {
             return;
         }
@@ -98,6 +103,41 @@ final class OrderStatusPanel extends JPanel implements PropertyChangeListener {
         }
         Delivery d = (Delivery) nv;
         SwingUtilities.invokeLater(() -> maybeApply(d));
+    }
+
+    private void applyFromPersistedOrder(Object newValue) {
+        if (!(newValue instanceof Order)) {
+            return;
+        }
+        Order u = (Order) newValue;
+        if (tracking == null || !u.getOrderId().equals(tracking.getOrderId())) {
+            return;
+        }
+        Order live = OrderManager.getInstance().findByOrderId(tracking.getOrderId());
+        if (live == null) {
+            return;
+        }
+        tracking = live;
+        OrderStatus st = live.getStatus() != null ? live.getStatus() : OrderStatus.PENDING;
+        long eta = estimateEtaForDisplay(st);
+        applyStatuses(st, live.getOrderId(), eta);
+    }
+
+    private static long estimateEtaForDisplay(OrderStatus st) {
+        if (st == null || st == OrderStatus.DELIVERED || st == OrderStatus.CANCELLED) {
+            return System.currentTimeMillis();
+        }
+        long now = System.currentTimeMillis();
+        switch (st) {
+            case PENDING:
+                return now + 32_000L;
+            case IN_PREPARATION:
+                return now + 24_000L;
+            case OUT_FOR_DELIVERY:
+                return now + 16_000L;
+            default:
+                return now + 20_000L;
+        }
     }
 
     void onShow() {
@@ -115,7 +155,7 @@ final class OrderStatusPanel extends JPanel implements PropertyChangeListener {
         if (st == null) {
             st = OrderStatus.PENDING;
         }
-        applyStatuses(st, tracking.getOrderId(), System.currentTimeMillis() + 8L * 1000 * 4L);
+        applyStatuses(st, tracking.getOrderId(), estimateEtaForDisplay(st));
     }
 
     private void maybeApply(Delivery d) {
@@ -137,12 +177,28 @@ final class OrderStatusPanel extends JPanel implements PropertyChangeListener {
 
     private void applyStatuses(OrderStatus st, String orderId, long etaEpoch) {
         progress.setIndeterminate(false);
-        progress.setValue(uiStep(st));
+        if (st == OrderStatus.CANCELLED) {
+            progress.setValue(1);
+            progress.setStringPainted(true);
+            progress.setString("Cancelled");
+        } else {
+            progress.setStringPainted(true);
+            progress.setString("Pending | In Preparation | Out for Delivery | Delivered");
+            progress.setValue(uiStep(st));
+        }
         orderIdText.setText("Order ID: " + orderId);
-        statusText.setText("Status: " + Delivery.label(st));
-        etaText.setText(st == OrderStatus.DELIVERED
-                ? "Delivered — " + ETA_FMT.format(new Date(etaEpoch))
-                : ("ETA completion window ends around " + ETA_FMT.format(new Date(etaEpoch))));
+        statusText.setText("Status: " + Delivery.label(st != null ? st : OrderStatus.PENDING));
+        etaText.setText(etaCaption(st, etaEpoch));
+    }
+
+    private static String etaCaption(OrderStatus st, long etaEpoch) {
+        if (st == OrderStatus.CANCELLED) {
+            return "Staff have been notified. This order will not be fulfilled.";
+        }
+        if (st == OrderStatus.DELIVERED) {
+            return "Delivered — " + ETA_FMT.format(new Date(etaEpoch));
+        }
+        return "ETA completion window ends around " + ETA_FMT.format(new Date(etaEpoch));
     }
 
     private static int uiStep(OrderStatus st) {

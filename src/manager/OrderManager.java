@@ -7,6 +7,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -29,7 +31,12 @@ import model.StaffUser;
  * Singleton persistence for {@code data/orders.json}.
  */
 public final class OrderManager {
+    /** Fires when order details change — new value is the updated {@link Order}. Old value prior status when applicable. */
+    public static final String PROPERTY_ORDER = "order";
+
     private static final OrderManager INSTANCE = new OrderManager();
+
+    private final PropertyChangeSupport pcs = new PropertyChangeSupport(this);
 
     private final List<Order> orders = new ArrayList<>();
     private final Path dataDir = Paths.get(System.getProperty("user.dir"), "data");
@@ -42,6 +49,14 @@ public final class OrderManager {
 
     public static OrderManager getInstance() {
         return INSTANCE;
+    }
+
+    public void addPropertyChangeListener(PropertyChangeListener listener) {
+        pcs.addPropertyChangeListener(listener);
+    }
+
+    public void removePropertyChangeListener(PropertyChangeListener listener) {
+        pcs.removePropertyChangeListener(listener);
     }
 
     public synchronized void loadOrders() {
@@ -141,14 +156,17 @@ public final class OrderManager {
         o.setTimestamp(System.currentTimeMillis());
         orders.add(o);
         saveOrdersImmediate("Could not save changes. Please check disk space.");
+        pcs.firePropertyChange(PROPERTY_ORDER, null, o);
         return o;
     }
 
     public synchronized void updateStatus(String orderId, OrderStatus status) {
         Order o = findByOrderId(orderId);
         if (o != null) {
+            OrderStatus previous = o.getStatus();
             o.setStatus(status);
             saveOrdersImmediate("Could not save changes. Please check disk space.");
+            pcs.firePropertyChange(PROPERTY_ORDER, previous, o);
         }
     }
 

@@ -1,14 +1,18 @@
 package ui;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.DefaultListCellRenderer;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JDialog;
+import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
@@ -19,6 +23,7 @@ import javax.swing.ListSelectionModel;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.table.DefaultTableModel;
 
+import manager.DeliveryManager;
 import manager.MenuManager;
 import manager.OrderManager;
 import model.Delivery;
@@ -45,6 +50,7 @@ final class AdminPanel extends JPanel {
                 }
             };
     private final JTable historyTable;
+    private final JComboBox<OrderStatus> orderStatusCombo = new JComboBox<>(OrderStatus.values());
 
     AdminPanel(MainFrame frame) {
         this.frame = frame;
@@ -58,6 +64,20 @@ final class AdminPanel extends JPanel {
 
         historyTable = new JTable(historyModel);
         UITheme.comfortTable(historyTable);
+
+        orderStatusCombo.setFont(UITheme.fontBody());
+        orderStatusCombo.setPreferredSize(new Dimension(300, 44));
+        orderStatusCombo.setRenderer(new DefaultListCellRenderer() {
+            @Override
+            public Component getListCellRendererComponent(JList<?> list, Object value, int index,
+                    boolean isSelected, boolean cellHasFocus) {
+                super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+                if (value instanceof OrderStatus) {
+                    setText(Delivery.label((OrderStatus) value));
+                }
+                return this;
+            }
+        });
 
         JPanel menuMgmt = UITheme.pad(new JPanel(new BorderLayout(10, 12)));
         menuMgmt.setOpaque(false);
@@ -82,11 +102,26 @@ final class AdminPanel extends JPanel {
         menuButtons.add(saveBtn);
         menuMgmt.add(menuButtons, BorderLayout.SOUTH);
 
-        JPanel historyWrap = UITheme.pad(new JPanel(new BorderLayout()));
+        JPanel historyWrap = UITheme.pad(new JPanel(new BorderLayout(12, 12)));
         historyWrap.setOpaque(false);
+        JPanel orderToolbar = UITheme.pad(new JPanel(new FlowLayout(FlowLayout.LEFT, 16, 8)));
+        orderToolbar.setOpaque(false);
+        orderToolbar.add(UITheme.body("Selected order → set status"));
+        orderToolbar.add(orderStatusCombo);
+        JButton applyOrderStatus = UITheme.primaryButton("Apply status");
+        applyOrderStatus.addActionListener(e -> applySelectedOrderStatus());
+        orderToolbar.add(applyOrderStatus);
+        historyWrap.add(orderToolbar, BorderLayout.NORTH);
+
         javax.swing.JScrollPane histScroll = new javax.swing.JScrollPane(historyTable);
         UITheme.comfortScroll(histScroll);
         historyWrap.add(histScroll, BorderLayout.CENTER);
+
+        historyTable.getSelectionModel().addListSelectionListener(e -> {
+            if (!e.getValueIsAdjusting()) {
+                syncStatusComboFromSelection();
+            }
+        });
 
         JTabbedPane tabs = new JTabbedPane();
         tabs.setFont(UITheme.fontBody());
@@ -103,6 +138,42 @@ final class AdminPanel extends JPanel {
         add(UITheme.centredTitle("Canteen administration", null), BorderLayout.NORTH);
         add(tabs, BorderLayout.CENTER);
         add(south, BorderLayout.SOUTH);
+    }
+
+    /** When a row is highlighted, mirror its current {@link OrderStatus} in the dropdown. */
+    private void syncStatusComboFromSelection() {
+        int viewRow = historyTable.getSelectedRow();
+        if (viewRow < 0) {
+            return;
+        }
+        int modelRow = historyTable.convertRowIndexToModel(viewRow);
+        String oid = String.valueOf(historyModel.getValueAt(modelRow, 0));
+        Order o = OrderManager.getInstance().findByOrderId(oid);
+        if (o != null && o.getStatus() != null) {
+            orderStatusCombo.setSelectedItem(o.getStatus());
+        }
+    }
+
+    private void applySelectedOrderStatus() {
+        int viewRow = historyTable.getSelectedRow();
+        if (viewRow < 0) {
+            JOptionPane.showMessageDialog(this,
+                    "Select an order in the table first.",
+                    "University of Botswana — Canteen", JOptionPane.INFORMATION_MESSAGE);
+            return;
+        }
+        int modelRow = historyTable.convertRowIndexToModel(viewRow);
+        String orderId = String.valueOf(historyModel.getValueAt(modelRow, 0));
+        OrderStatus picked = (OrderStatus) orderStatusCombo.getSelectedItem();
+        if (picked == null) {
+            return;
+        }
+        OrderManager.getInstance().updateStatus(orderId, picked);
+        DeliveryManager.getInstance().externalOrderStatusEdited(orderId);
+        refreshOrders();
+        JOptionPane.showMessageDialog(this,
+                "Order " + orderId + " is now: " + Delivery.label(picked) + ".",
+                "University of Botswana — Canteen", JOptionPane.INFORMATION_MESSAGE);
     }
 
     private void maybeRefreshOrders(JTabbedPane tabs) {

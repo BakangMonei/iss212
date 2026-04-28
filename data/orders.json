@@ -46,7 +46,7 @@
         }
       }
     ],
-    "status": "PENDING",
+    "status": "IN_PREPARATION",
     "timestamp": 1777377142116
   },
   {
@@ -70,7 +70,7 @@
         "category": "Breakfast"
       }
     }],
-    "status": "PENDING",
+    "status": "DELIVERED",
     "timestamp": 1777378648045
   },
   {

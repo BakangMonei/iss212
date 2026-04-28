@@ -102,6 +102,30 @@ public final class DeliveryManager {
         }
     }
 
+    /**
+     * Invoked after {@link OrderManager#updateStatus(String, OrderStatus)} from admin UI.
+     * If the affected order is the one currently tracked for simulation, stops the timer and
+     * refreshes {@link #current} so staff tracking matches disk. Other orders' simulations are left running.
+     */
+    public void externalOrderStatusEdited(String orderId) {
+        if (orderId == null) {
+            return;
+        }
+        Delivery prev = current;
+        boolean sameTracked = prev != null && prev.getOrder() != null
+                && orderId.equals(prev.getOrder().getOrderId());
+        if (sameTracked) {
+            stopSimulation();
+            Order live = OrderManager.getInstance().findByOrderId(orderId);
+            if (live != null) {
+                Delivery neo = new Delivery(prev.getDeliveryId(), live,
+                        System.currentTimeMillis(), live.getStatus());
+                current = neo;
+                pcs.firePropertyChange(PROPERTY_DELIVERY, prev, neo);
+            }
+        }
+    }
+
     /** Fire an extra UI refresh on the EDT (used after panel attach). */
     public void refreshListeners() {
         SwingUtilities.invokeLater(() -> {
