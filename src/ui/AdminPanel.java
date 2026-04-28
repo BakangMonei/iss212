@@ -11,15 +11,12 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.SpinnerNumberModel;
-import javax.swing.event.ChangeListener;
-
 import javax.swing.table.DefaultTableModel;
 
 import manager.MenuManager;
@@ -52,24 +49,22 @@ final class AdminPanel extends JPanel {
     AdminPanel(MainFrame frame) {
         this.frame = frame;
         setOpaque(false);
-        setLayout(new BorderLayout(12, 12));
+        setLayout(new BorderLayout(16, 16));
 
         menuTable = new JTable(menuModel);
         menuTable.setAutoCreateRowSorter(true);
         menuTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        menuTable.setRowHeight(24);
-        menuTable.setFont(UITheme.fontBody());
-        menuTable.getTableHeader().setFont(UITheme.fontBody());
+        UITheme.comfortTable(menuTable);
 
         historyTable = new JTable(historyModel);
-        historyTable.setFont(UITheme.fontBody());
-        historyTable.setRowHeight(24);
-        historyTable.getTableHeader().setFont(UITheme.fontBody());
+        UITheme.comfortTable(historyTable);
 
-        JPanel menuMgmt = UITheme.pad(new JPanel(new BorderLayout(8, 8)));
+        JPanel menuMgmt = UITheme.pad(new JPanel(new BorderLayout(10, 12)));
         menuMgmt.setOpaque(false);
         menuMgmt.add(UITheme.body("Editable cells update the working copy until you press Save."), BorderLayout.NORTH);
-        menuMgmt.add(new JScrollPane(menuTable), BorderLayout.CENTER);
+        javax.swing.JScrollPane menuScroll = new javax.swing.JScrollPane(menuTable);
+        UITheme.comfortScroll(menuScroll);
+        menuMgmt.add(menuScroll, BorderLayout.CENTER);
 
         JPanel menuButtons = UITheme.pad(new JPanel(new FlowLayout(FlowLayout.LEFT, 8, 0)));
         menuButtons.setOpaque(false);
@@ -89,7 +84,9 @@ final class AdminPanel extends JPanel {
 
         JPanel historyWrap = UITheme.pad(new JPanel(new BorderLayout()));
         historyWrap.setOpaque(false);
-        historyWrap.add(new JScrollPane(historyTable), BorderLayout.CENTER);
+        javax.swing.JScrollPane histScroll = new javax.swing.JScrollPane(historyTable);
+        UITheme.comfortScroll(histScroll);
+        historyWrap.add(histScroll, BorderLayout.CENTER);
 
         JTabbedPane tabs = new JTabbedPane();
         tabs.setFont(UITheme.fontBody());

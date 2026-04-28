@@ -1,6 +1,7 @@
 package ui;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.util.List;
 
@@ -57,10 +58,8 @@ final class CartPanel extends JPanel {
         };
 
         table = new JTable(model);
-        table.setFont(UITheme.fontBody());
-        table.setRowHeight(26);
+        UITheme.comfortTable(table);
         table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        table.getTableHeader().setFont(UITheme.fontBody());
         table.setFillsViewportHeight(true);
 
         model.addTableModelListener(new TableModelListener() {
@@ -83,10 +82,10 @@ final class CartPanel extends JPanel {
         });
 
         totalLabel = new JLabel("Total: BWP 0.00");
-        totalLabel.setFont(UITheme.fontHeading());
+        totalLabel.setFont(UITheme.fontTitle());
         totalLabel.setForeground(UITheme.TEXT_PRIMARY);
 
-        setLayout(new BorderLayout(12, 12));
+        setLayout(new BorderLayout(16, 16));
         setOpaque(false);
 
         JPanel north = UITheme.centredTitle("Checkout — review your cart", null);
@@ -94,13 +93,16 @@ final class CartPanel extends JPanel {
 
         JPanel mid = UITheme.pad(new JPanel(new BorderLayout()));
         mid.setOpaque(false);
-        mid.add(new JScrollPane(table), BorderLayout.CENTER);
+        JScrollPane tableScroll = new JScrollPane(table);
+        UITheme.comfortScroll(tableScroll);
+        mid.add(tableScroll, BorderLayout.CENTER);
 
-        JPanel locRow = new JPanel(new FlowLayout(FlowLayout.LEFT, 8, 0));
+        JPanel locRow = new JPanel(new FlowLayout(FlowLayout.LEFT, 12, 0));
         locRow.setOpaque(false);
         locRow.add(UITheme.body("Delivery location"));
         location.setFont(UITheme.fontBody());
-        location.setColumns(42);
+        location.setColumns(52);
+        location.setPreferredSize(new Dimension(720, 44));
         locRow.add(location);
 
         mid.add(locRow, BorderLayout.SOUTH);

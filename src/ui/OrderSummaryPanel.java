@@ -1,6 +1,7 @@
 package ui;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 
 import javax.swing.JButton;
@@ -41,16 +42,14 @@ final class OrderSummaryPanel extends JPanel {
     OrderSummaryPanel(MainFrame frame) {
         this.frame = frame;
         itemsTable = new JTable(tableModel);
-        itemsTable.setFont(UITheme.fontBody());
-        itemsTable.setRowHeight(26);
-        itemsTable.getTableHeader().setFont(UITheme.fontBody());
+        UITheme.comfortTable(itemsTable);
         setOpaque(false);
-        setLayout(new BorderLayout(16, 16));
+        setLayout(new BorderLayout(20, 20));
 
         JPanel header = UITheme.centredTitle("Order confirmed", null);
         header.setOpaque(false);
 
-        JPanel meta = new JPanel(new java.awt.GridLayout(0, 1, 4, 0));
+        JPanel meta = new JPanel(new java.awt.GridLayout(0, 1, 8, 8));
         meta.setOpaque(false);
         orderIdLabel.setFont(UITheme.fontBody());
         staffLabel.setFont(UITheme.fontBody());
@@ -61,9 +60,12 @@ final class OrderSummaryPanel extends JPanel {
 
         JPanel centreArea = UITheme.pad(new JPanel(new BorderLayout(8, 8)));
         centreArea.setOpaque(false);
-        centreArea.add(new JScrollPane(itemsTable), BorderLayout.CENTER);
+        JScrollPane tableScroll = new JScrollPane(itemsTable);
+        UITheme.comfortScroll(tableScroll);
+        tableScroll.setPreferredSize(new Dimension(500, 380));
+        centreArea.add(tableScroll, BorderLayout.CENTER);
 
-        totalLabel.setFont(UITheme.fontHeading());
+        totalLabel.setFont(UITheme.fontTitle());
         totalLabel.setForeground(UITheme.TEXT_PRIMARY);
         JPanel totalsRow = UITheme.pad(new JPanel(new FlowLayout(FlowLayout.RIGHT)));
         totalsRow.setOpaque(false);

@@ -1,6 +1,7 @@
 package ui;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 
@@ -28,11 +29,13 @@ final class MenuItemCard extends JPanel {
     MenuItemCard(MainFrame frame, MenuItem item, Runnable cartListener) {
         this.item = item;
         this.cartListener = cartListener;
-        setLayout(new BorderLayout(8, 8));
+        setLayout(new BorderLayout(12, 12));
+        setMinimumSize(new Dimension(280, 200));
+        setPreferredSize(new Dimension(380, 240));
         setBackground(UITheme.WHITE);
         setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createLineBorder(UITheme.UB_GREEN, 1),
-                BorderFactory.createEmptyBorder(12, 12, 12, 12)));
+                BorderFactory.createLineBorder(UITheme.UB_GREEN, 2),
+                BorderFactory.createEmptyBorder(18, 18, 18, 18)));
 
         JLabel title = new JLabel(item.getName());
         title.setFont(UITheme.fontHeading().deriveFont(Font.BOLD));
@@ -68,6 +71,11 @@ final class MenuItemCard extends JPanel {
         SpinnerNumberModel m = new SpinnerNumberModel(1, 1, 10, 1);
         qtySpinner = new JSpinner(m);
         qtySpinner.setFont(UITheme.fontBody());
+        qtySpinner.setPreferredSize(new Dimension(84, 40));
+        if (qtySpinner.getEditor() instanceof javax.swing.JSpinner.DefaultEditor) {
+            ((javax.swing.JSpinner.DefaultEditor) qtySpinner.getEditor()).getTextField()
+                    .setFont(UITheme.fontBody());
+        }
         ChangeListener sync = e -> {
             int v = UserSession.clampQty((Integer) qtySpinner.getValue());
             if (!Integer.valueOf(v).equals(qtySpinner.getValue())) {

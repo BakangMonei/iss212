@@ -1,6 +1,7 @@
 package ui;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -39,17 +40,18 @@ final class OrderStatusPanel extends JPanel implements PropertyChangeListener {
     OrderStatusPanel(MainFrame frame) {
         this.frame = frame;
         setOpaque(false);
-        setLayout(new BorderLayout(16, 16));
+        setLayout(new BorderLayout(20, 20));
 
         JPanel north = UITheme.centredTitle("Delivery progress", null);
         north.setOpaque(false);
 
-        JPanel centre = UITheme.pad(new JPanel(new BorderLayout(12, 12)));
+        JPanel centre = UITheme.pad(new JPanel(new BorderLayout(16, 16)));
         centre.setOpaque(false);
 
         progress.setFont(UITheme.fontBody());
         progress.setStringPainted(true);
         progress.setString("Pending | In Preparation | Out for Delivery | Delivered");
+        progress.setPreferredSize(new Dimension(960, 48));
 
         statusText.setFont(UITheme.fontHeading());
         statusText.setForeground(UITheme.TEXT_PRIMARY);

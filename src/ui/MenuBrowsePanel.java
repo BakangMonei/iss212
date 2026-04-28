@@ -26,16 +26,16 @@ final class MenuBrowsePanel extends JPanel {
     private final MainFrame frame;
 
     private final JTabbedPane tabs = new JTabbedPane();
-    private final JTextField search = new JTextField(28);
+    private final JTextField search = new JTextField(42);
     private final JLabel cartBadge = new JLabel("Cart: 0 items");
     private final List<MenuItemCard> cards = new ArrayList<>();
 
     MenuBrowsePanel(MainFrame frame) {
         this.frame = frame;
-        setLayout(new BorderLayout(12, 12));
+        setLayout(new BorderLayout(18, 18));
         setOpaque(false);
 
-        JPanel north = UITheme.pad(new JPanel(new BorderLayout(8, 8)));
+        JPanel north = UITheme.pad(new JPanel(new BorderLayout(12, 14)));
         north.setOpaque(false);
         north.add(UITheme.centredTitle("Browse today's menu",
                 UITheme.toolRow(cartBadge, viewCartButton())), BorderLayout.NORTH);
@@ -67,7 +67,7 @@ final class MenuBrowsePanel extends JPanel {
         searchRow.add(search);
         north.add(searchRow, BorderLayout.SOUTH);
 
-        tabs.setFont(UITheme.fontBody());
+        tabs.setFont(UITheme.fontHeading());
 
         JPanel centre = UITheme.pad(new JPanel(new BorderLayout()));
         centre.setOpaque(false);
@@ -106,7 +106,7 @@ final class MenuBrowsePanel extends JPanel {
 
     void refreshCartBadge() {
         int n = UserSession.getInstance().cartItemCount();
-        cartBadge.setFont(UITheme.fontBody());
+        cartBadge.setFont(UITheme.fontHeading());
         cartBadge.setForeground(UITheme.TEXT_PRIMARY);
         cartBadge.setText("Cart: " + n + (n == 1 ? " item" : " items"));
     }
@@ -123,7 +123,7 @@ final class MenuBrowsePanel extends JPanel {
             if (group == null || group.isEmpty()) {
                 continue;
             }
-            JPanel grid = new JPanel(new GridLayout(0, 3, 12, 12));
+            JPanel grid = new JPanel(new GridLayout(0, 2, 20, 20));
             grid.setOpaque(false);
             for (MenuItem mi : group) {
                 MenuItem live = mgr.findById(mi.getId());
@@ -138,7 +138,9 @@ final class MenuBrowsePanel extends JPanel {
             }
             JPanel wrap = UITheme.pad(new JPanel(new BorderLayout()));
             wrap.setOpaque(false);
-            wrap.add(new JScrollPane(grid), BorderLayout.CENTER);
+            JScrollPane sp = new JScrollPane(grid);
+            UITheme.comfortScroll(sp);
+            wrap.add(sp, BorderLayout.CENTER);
             tabs.addTab(cat, wrap);
         }
         tabs.revalidate();

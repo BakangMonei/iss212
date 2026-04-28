@@ -32,7 +32,7 @@ public class MainFrame extends JFrame {
         super();
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        JPanel root = UITheme.pad(new JPanel(new BorderLayout(16, 16)));
+        JPanel root = UITheme.pad(new JPanel(new BorderLayout(20, 20)));
         JPanel banner = UITheme.banner("University of Botswana — Staff Canteen");
         banner.setOpaque(true);
 
@@ -58,12 +58,12 @@ public class MainFrame extends JFrame {
 
         setContentPane(UITheme.pad(root));
 
-        Dimension d = getPreferredSize();
-        setPreferredSize(new Dimension(Math.max(d.width, 1024), Math.max(d.height, 660)));
-        setMinimumSize(new Dimension(920, 520));
         setTitle("University of Botswana — Staff Canteen");
-        setLocationRelativeTo(null);
         switchPanel(LOGIN);
+        pack();
+        setMinimumSize(new Dimension(1024, 700));
+        setSize(new Dimension(1320, 860));
+        setLocationRelativeTo(null);
     }
 
     /** Switch deck — key must match constants on this frame. */
