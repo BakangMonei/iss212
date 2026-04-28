@@ -38,7 +38,7 @@ final class MenuBrowsePanel extends JPanel {
         JPanel north = UITheme.pad(new JPanel(new BorderLayout(12, 14)));
         north.setOpaque(false);
         north.add(UITheme.centredTitle("Browse today's menu",
-                UITheme.toolRow(cartBadge, viewCartButton())), BorderLayout.NORTH);
+                UITheme.toolRow(cartBadge, myOrdersButton(), viewCartButton())), BorderLayout.NORTH);
 
         JPanel searchRow = new JPanel(new FlowLayout(FlowLayout.LEFT, 8, 0));
         searchRow.setOpaque(false);
@@ -82,6 +82,12 @@ final class MenuBrowsePanel extends JPanel {
         add(north, BorderLayout.NORTH);
         add(centre, BorderLayout.CENTER);
         add(southStrip, BorderLayout.SOUTH);
+    }
+
+    private JButton myOrdersButton() {
+        JButton b = UITheme.secondaryButton("My orders");
+        b.addActionListener(e -> frame.switchPanel(MainFrame.STAFF_ORDERS));
+        return b;
     }
 
     private JButton viewCartButton() {

@@ -134,5 +134,55 @@
     ],
     "status": "PENDING",
     "timestamp": 1777378707792
+  },
+  {
+    "deliveryLocation": "Gaborone",
+    "orderId": "UB-ORD-37988",
+    "staffUser": {
+      "role": "STAFF",
+      "name": "Staff \u2014 staff123",
+      "department": "University of Botswana",
+      "staffId": "staff123"
+    },
+    "items": [
+      {
+        "quantity": 5,
+        "subtotal": 75,
+        "menuItem": {
+          "quantity": 40,
+          "price": 15,
+          "name": "Toast & Beans",
+          "available": true,
+          "id": "breakfast_toast_beans",
+          "category": "Breakfast"
+        }
+      },
+      {
+        "quantity": 3,
+        "subtotal": 54,
+        "menuItem": {
+          "quantity": 50,
+          "price": 18,
+          "name": "Pap & Eggs",
+          "available": true,
+          "id": "breakfast_pap_eggs",
+          "category": "Breakfast"
+        }
+      },
+      {
+        "quantity": 5,
+        "subtotal": 60,
+        "menuItem": {
+          "quantity": 30,
+          "price": 12,
+          "name": "Fruit Salad",
+          "available": true,
+          "id": "breakfast_fruit_salad",
+          "category": "Breakfast"
+        }
+      }
+    ],
+    "status": "DELIVERED",
+    "timestamp": 1777379918543
   }
 ]

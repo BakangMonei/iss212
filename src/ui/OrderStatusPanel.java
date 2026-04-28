@@ -72,9 +72,16 @@ final class OrderStatusPanel extends JPanel implements PropertyChangeListener {
         JButton newOrderBtn = UITheme.primaryButton("Place New Order");
         newOrderBtn.addActionListener(e -> startNewOrder());
 
-        JPanel south = UITheme.pad(new JPanel(new FlowLayout(FlowLayout.RIGHT, 12, 0)));
+        JButton myOrdersBtn = UITheme.secondaryButton("My orders");
+        myOrdersBtn.addActionListener(e -> frame.switchPanel(MainFrame.STAFF_ORDERS));
+
+        JPanel south = UITheme.pad(new JPanel(new BorderLayout(12, 0)));
         south.setOpaque(false);
-        south.add(newOrderBtn);
+        south.add(myOrdersBtn, BorderLayout.WEST);
+        JPanel east = new JPanel(new FlowLayout(FlowLayout.RIGHT, 12, 0));
+        east.setOpaque(false);
+        east.add(newOrderBtn);
+        south.add(east, BorderLayout.EAST);
 
         add(north, BorderLayout.NORTH);
         add(centre, BorderLayout.CENTER);

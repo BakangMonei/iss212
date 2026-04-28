@@ -13,6 +13,7 @@ public class MainFrame extends JFrame {
 
     public static final String LOGIN = "LOGIN";
     public static final String MENU = "MENU";
+    public static final String STAFF_ORDERS = "STAFF_ORDERS";
     public static final String CART = "CART";
     public static final String SUMMARY = "SUMMARY";
     public static final String STATUS = "STATUS";
@@ -27,6 +28,7 @@ public class MainFrame extends JFrame {
     private OrderSummaryPanel orderSummaryPanel;
     private OrderStatusPanel orderStatusPanel;
     private AdminPanel adminPanel;
+    private StaffOrdersPanel staffOrdersPanel;
 
     public MainFrame() {
         super();
@@ -42,6 +44,7 @@ public class MainFrame extends JFrame {
         orderSummaryPanel = new OrderSummaryPanel(this);
         orderStatusPanel = new OrderStatusPanel(this);
         adminPanel = new AdminPanel(this);
+        staffOrdersPanel = new StaffOrdersPanel(this);
 
         deck.setOpaque(false);
         deck.add(loginPanel, LOGIN);
@@ -50,6 +53,7 @@ public class MainFrame extends JFrame {
         deck.add(orderSummaryPanel, SUMMARY);
         deck.add(orderStatusPanel, STATUS);
         deck.add(adminPanel, ADMIN);
+        deck.add(staffOrdersPanel, STAFF_ORDERS);
 
         root.add(banner, BorderLayout.NORTH);
         root.add(deck, BorderLayout.CENTER);
@@ -81,6 +85,8 @@ public class MainFrame extends JFrame {
             orderStatusPanel.onShow();
         } else if (ADMIN.equals(name)) {
             adminPanel.onShow();
+        } else if (STAFF_ORDERS.equals(name)) {
+            staffOrdersPanel.onShow();
         }
     }
 
@@ -102,6 +108,10 @@ public class MainFrame extends JFrame {
 
     public OrderStatusPanel getOrderStatusPanel() {
         return orderStatusPanel;
+    }
+
+    public StaffOrdersPanel getStaffOrdersPanel() {
+        return staffOrdersPanel;
     }
 
     public AdminPanel getAdminPanel() {
