@@ -1,0 +1,50 @@
+[{
+  "deliveryLocation": "Gaborone",
+  "orderId": "UB-ORD-73088",
+  "staffUser": {
+    "role": "STAFF",
+    "name": "Staff \u2014 staff123",
+    "department": "University of Botswana",
+    "staffId": "staff123"
+  },
+  "items": [
+    {
+      "quantity": 1,
+      "subtotal": 15,
+      "menuItem": {
+        "quantity": 40,
+        "price": 15,
+        "name": "Toast & Beans",
+        "available": true,
+        "id": "breakfast_toast_beans",
+        "category": "Breakfast"
+      }
+    },
+    {
+      "quantity": 1,
+      "subtotal": 8,
+      "menuItem": {
+        "quantity": 60,
+        "price": 8,
+        "name": "Vetkoek",
+        "available": true,
+        "id": "breakfast_vetkoek",
+        "category": "Breakfast"
+      }
+    },
+    {
+      "quantity": 1,
+      "subtotal": 12,
+      "menuItem": {
+        "quantity": 70,
+        "price": 12,
+        "name": "Samosa x3",
+        "available": true,
+        "id": "snacks_samosa",
+        "category": "Snacks"
+      }
+    }
+  ],
+  "status": "PENDING",
+  "timestamp": 1777377142116
+}]

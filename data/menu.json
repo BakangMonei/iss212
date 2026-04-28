@@ -1,0 +1,114 @@
+{"items": [
+  {
+    "quantity": 50,
+    "price": 18,
+    "name": "Pap & Eggs",
+    "available": true,
+    "id": "breakfast_pap_eggs",
+    "category": "Breakfast"
+  },
+  {
+    "quantity": 40,
+    "price": 15,
+    "name": "Toast & Beans",
+    "available": true,
+    "id": "breakfast_toast_beans",
+    "category": "Breakfast"
+  },
+  {
+    "quantity": 60,
+    "price": 8,
+    "name": "Vetkoek",
+    "available": true,
+    "id": "breakfast_vetkoek",
+    "category": "Breakfast"
+  },
+  {
+    "quantity": 30,
+    "price": 12,
+    "name": "Fruit Salad",
+    "available": true,
+    "id": "breakfast_fruit_salad",
+    "category": "Breakfast"
+  },
+  {
+    "quantity": 40,
+    "price": 35,
+    "name": "Beef Stew & Rice",
+    "available": true,
+    "id": "mains_beef_stew",
+    "category": "Mains"
+  },
+  {
+    "quantity": 35,
+    "price": 38,
+    "name": "Chicken & Dumplings",
+    "available": true,
+    "id": "mains_chicken_dumplings",
+    "category": "Mains"
+  },
+  {
+    "quantity": 45,
+    "price": 28,
+    "name": "Vegetable Curry & Rice",
+    "available": true,
+    "id": "mains_veg_curry",
+    "category": "Mains"
+  },
+  {
+    "quantity": 20,
+    "price": 42,
+    "name": "Grilled Fish & Chips",
+    "available": true,
+    "id": "mains_fish_chips",
+    "category": "Mains"
+  },
+  {
+    "quantity": 80,
+    "price": 14,
+    "name": "Chicken Pie",
+    "available": true,
+    "id": "snacks_chicken_pie",
+    "category": "Snacks"
+  },
+  {
+    "quantity": 100,
+    "price": 10,
+    "name": "Sausage Roll",
+    "available": true,
+    "id": "snacks_sausage_roll",
+    "category": "Snacks"
+  },
+  {
+    "quantity": 70,
+    "price": 12,
+    "name": "Samosa x3",
+    "available": true,
+    "id": "snacks_samosa",
+    "category": "Snacks"
+  },
+  {
+    "quantity": 90,
+    "price": 8,
+    "name": "Maheu",
+    "available": true,
+    "id": "drinks_maheu",
+    "category": "Drinks"
+  },
+  {
+    "quantity": 120,
+    "price": 5,
+    "name": "Mineral Water",
+    "available": true,
+    "id": "drinks_water",
+    "category": "Drinks"
+  },
+  {
+    "quantity": 85,
+    "price": 10,
+    "name": "Juice Box",
+    "available": false,
+    "id": "drinks_juice",
+    "category": "Drinks"
+  }
+]}
